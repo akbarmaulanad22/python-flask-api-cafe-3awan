@@ -1,0 +1,745 @@
+{
+    "openapi":"3.0.3",
+    "info": {
+      "title":"Flask RESTful API Cafe 3awan",
+      "version":"1.0",
+      "contact": {
+        "email": "zulfikarwxz22@gmail.com",
+        "name": "Akbar maulana"
+      }
+      
+    },
+    "servers": [
+      {"url":"http://localhost:9090/api/v1", "description": "url for developments"},
+      {"url":"https://api.server.test/v1", "description": "url for productions"}
+    ],
+    "paths": {
+      "/menus": {
+        "get": {
+          "security": [{"Auth": []}],
+          "tags": ["menus"],
+          "summary": "Get all menu",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/search"
+            },
+            {
+              "$ref": "#/components/parameters/category_id"
+            },
+            {
+              "$ref": "#/components/parameters/price_from"
+            },
+            {
+              "$ref": "#/components/parameters/price_to"
+            },
+            {
+              "$ref": "#/components/parameters/page"
+            },
+            {
+              "$ref": "#/components/parameters/size"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success get all menu",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/menus_response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/cart": {
+        "post": {
+          "security": [{"Auth": []}],
+          "tags": ["carts"],
+          "summary": "Create cart from menus",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/create_cart_request"
+                },
+                "examples": {
+                  "add_to_cart_by_vio": {
+                    "value": {
+                      "menu_id": 2
+                    }
+                  },
+                  "add_to_cart_by_akbar": {
+                    "value": {
+                      "menu_id": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success add menu to cart",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/cart_response"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid body request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Validation errors",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "get":{
+          "security": [{"Auth": []}],
+          "tags": ["carts"],
+          "summary": "Get all cart menu",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/search"
+            },
+            {
+              "$ref": "#/components/parameters/page"
+            },
+            {
+              "$ref": "#/components/parameters/size"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success get all cart item",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/carts_response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "security": [{"Auth": []}],
+          "tags": ["carts"],
+          "summary": "Delete all menu in cart",
+          "responses": {
+            "201": {
+              "description": "Success delete all menu in cart"
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/cart/menus/{menuId}": {
+        "patch": {
+          "security": [{"Auth": []}],
+          "tags": ["carts"],
+          "summary": "Update qty menu in cart",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/menu_id"
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Success update quantity menu in cart"
+            },
+            "400": {
+              "description": "Invalid body request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Validation errors",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "security": [{"Auth": []}],
+          "tags": ["carts"],
+          "summary": "Delete menu in cart",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/menu_id"
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Success delete menu in cart"
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/orders": {
+        "post": {
+          "security": [{"Auth": []}],
+          "tags": ["orders"],
+          "summary": "Create order from data cart",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/create_order_request"
+                },
+                "examples": {
+                  "order_by_akbar": {
+                    "value": {
+                      "details": [
+                        {
+                          "menu_id": 5,
+                          "qty": 1
+                        }
+                      ]
+                    }
+                  },
+                  "order_by_vio": {
+                    "value": {
+                      "details": [
+                        {
+                          "menu_id": 7,
+                          "qty": 2
+                        },
+                        {
+                          "menu_id": 8,
+                          "qty": 5
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "responses": {
+            "200": {
+              "description": "Success get all menu",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/orders_response"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid body request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Validation errors",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "get": {
+          "security": [{"Auth": []}],
+          "tags": ["orders"],
+           "summary": "Get all orders",
+           "parameters": [
+            {
+              "$ref": "#/components/parameters/search"              
+            },
+            {
+              "$ref": "#/components/parameters/page"
+            },
+            {
+              "$ref": "#/components/parameters/size"
+            }
+          ],
+          "responses": {
+             "200": {
+              "description": "Success get orders",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/orders_response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/error_response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+    },
+    "components": {
+      "securitySchemes": {
+        "Auth": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "X-API-KEY"
+        }
+      },
+      "parameters": {
+        "search": {
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "baju_pripayer": {
+              "value": "Baju pripayer"
+            },
+              "baju_ultramen": {
+              "value": "Baju ultramen"
+            }
+          },
+          "name": "search",
+          "in": "query"
+        },
+        "page": {
+          "schema": {
+            "type": "string",
+            "default": "1"
+          },
+          "examples": {
+            "page_1": {
+              "value": 1
+            },
+              "page_2": {
+              "value": 2
+            }
+          },
+          "name": "page",
+          "description": "for getting data with pagination",
+          "in": "query"
+        },
+        "size": {
+          "schema": {
+            "type": "string",
+            "default": "10"
+          },
+          "examples": {
+            "size_10": {
+              "value": 10
+            },
+              "size_20": {
+              "value": 20
+            }
+          },
+          "name": "size",
+          "description": "for getting max size data with pagination",
+          "in": "query"
+        },
+        "price_from": {
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "from_10000": {
+              "value": 10000
+            },
+              "from_25000": {
+              "value": 25000
+            }
+          },
+          "name": "price_from",
+          "in": "query"
+        },
+        "price_to": {
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "to_10000": {
+              "value": 10000
+            },
+              "to_25000": {
+              "value": 25000
+            }
+          },
+          "name": "price_to",
+          "in": "query"
+        },
+        "category_id": {
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "category_id_1": {
+              "value": 1
+            },
+              "category_id_2": {
+              "value": 2
+            }
+          },
+          "name": "category_id",
+          "in": "query"
+        },
+        "menu_id": {
+          "schema": {
+            "type": "string"
+          },
+          "examples": {
+            "menu_id_1": {
+              "value": 1
+            },
+              "menu_id_2": {
+              "value": 2
+            }
+          },
+          "name": "menu_id",
+          "in": "path",
+          "required": true
+        }
+      },
+      "schemas": {
+        "error_response": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cart_response": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "menu_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+         "carts_response": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/menus"
+              }
+            },
+            "meta": {
+              "type": "object",
+              "properties": {
+                "page": {
+                  "type": "integer"
+                },
+                "per_page": {
+                  "type": "integer"
+                },
+                "total_page": {
+                  "type": "integer"
+                },
+                "total_items": {
+                  "type": "integer"
+                }                          
+              }
+            }
+          }
+        },
+        "create_cart_request": {
+          "type": "object",
+          "properties": {
+            "menu_id": {
+              "type": "integer"
+            }
+          },
+          "required": ["menu_id"]
+        },
+        "menus_response": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/menus"
+              }
+            },
+            "meta": {
+              "type": "object",
+              "properties": {
+                "page": {
+                  "type": "integer"
+                },
+                "per_page": {
+                  "type": "integer"
+                },
+                "total_page": {
+                  "type": "integer"
+                },
+                "total_items": {
+                  "type": "integer"
+                }                          
+              }
+            }
+          }
+        },
+        "menu_response": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "data": {
+              "$ref": "#/components/schemas/menus"
+            },
+            "meta": {
+              "type": "object",
+              "properties": {
+                "page": {
+                  "type": "integer"
+                },
+                "per_page": {
+                  "type": "integer"
+                },
+                "total_page": {
+                  "type": "integer"
+                },
+                "total_items": {
+                  "type": "integer"
+                }                          
+              }
+            }
+          }
+        },
+        "menus": {
+          "type": "object",
+          "properties": {
+            "menu_id": {
+              "type": "string"
+            },
+            "price": {
+              "type": "integer"
+            },
+            "img_url": {
+              "type": "string"
+            },
+            "qty": {
+              "type": "integer"
+            }
+          }
+        },
+        "orders_response": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/menus"
+              }
+            },
+            "meta": {
+              "type": "object",
+              "properties": {
+                "page": {
+                  "type": "integer"
+                },
+                "per_page": {
+                  "type": "integer"
+                },
+                "total_page": {
+                  "type": "integer"
+                },
+                "total_items": {
+                  "type": "integer"
+                }                          
+              }
+            }
+          }
+        },
+        "create_order_request": {
+          "type": "object",
+          "properties": {
+            "details": {
+              "type": "array",
+              "items": {
+                "minLength": 1,
+                "type": "object",
+                "properties": {
+                  "menu_id":{
+                    "type": "integer"
+                  },
+                  "qty": {
+                    "type": "integer"
+                  }
+                },
+                "required": ["menu_id", "qty"]
+              }
+            }
+          },
+          "required": ["details"]
+        }
+      }
+    }
+  }
